@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\PubPiece\PubPiece;
+use App\Models\PubRequest\PubRequest;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -19,9 +21,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
+        'cnpj',
         'password',
     ];
+
+    protected $guarded = ['agency_id'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -33,12 +37,13 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function pubRequests()
+    {
+        return $this->hasMany(PubRequest::class);
+    }
+
+    public function pubPieces()
+    {
+        return $this->hasMany(PubPiece::class);
+    }
 }

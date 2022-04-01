@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('reference_files', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('cnpj');
-            $table->string('password');
-            $table->rememberToken();
             $table->timestamps();
+            $table->unsignedBigInteger('pub_request_id');
+            $table->string('file_path');
+            $table->boolean('is_image');
+            $table->foreign('pub_request_id')->references('id')->on('pub_requests');
         });
     }
 
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('reference_files');
     }
 };

@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('buget_types_on', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('cnpj');
-            $table->string('password');
-            $table->rememberToken();
             $table->timestamps();
+            $table->unsignedBigInteger('pub_request_id');
+            $table->unsignedBigInteger('budget_type_id');
+            $table->foreign('pub_request_id')->references('id')->on('pub_requests');
+            $table->foreign('budget_type_id')->references('id')->on('budget_types');
         });
     }
 
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('buget_types_on');
     }
 };
