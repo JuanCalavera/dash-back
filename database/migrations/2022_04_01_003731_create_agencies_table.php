@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('logo_path');
             $table->string('theme_path');
             $table->string('icon_path');
+            $table->string('name');
         });
     }
 

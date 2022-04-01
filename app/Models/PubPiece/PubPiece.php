@@ -4,6 +4,7 @@ namespace App\Models\PubPiece;
 
 use App\Models\Agency;
 use App\Models\User;
+use Database\Factories\PubPieceFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,6 +15,11 @@ class PubPiece extends Model
     protected $fillable = ['was_liked', 'title', 'description'];
 
     protected $guarded = ['agency_id', 'image_url', 'user_id', 'pub_request_id'];
+
+    protected static function newFactory()
+    {
+        return PubPieceFactory::new();
+    }
 
     public function comments()
     {

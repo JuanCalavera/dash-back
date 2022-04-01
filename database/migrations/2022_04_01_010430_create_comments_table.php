@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamps();
             $table->text('content');
             $table->unsignedBigInteger('pub_request_id');
-            $table->foreign('pub_request_id')->references('id')->on('pub_requests');
+            $table->foreign('pub_request_id')->references('id')->on('pub_requests')->cascadeOnDelete();
         });
     }
 

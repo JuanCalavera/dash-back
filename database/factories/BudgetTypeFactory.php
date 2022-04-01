@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Agency;
+use App\Models\AgencySettings\BudgetType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,6 +11,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class BudgetTypeFactory extends Factory
 {
+    protected $model = BudgetType::class;
+
     /**
      * Define the model's default state.
      *
@@ -17,7 +21,8 @@ class BudgetTypeFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'title' => 'Tipo de orçamento ' . random_int(0, 10),
+            'agency_id'  => Agency::where('name', 'like', 'Dash')->first()->id,
         ];
     }
 }

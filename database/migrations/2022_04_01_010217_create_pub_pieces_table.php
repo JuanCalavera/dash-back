@@ -17,14 +17,14 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('image_url');
-            $table->boolean('was_liked');
+            $table->boolean('was_liked')->nullable();
             $table->string('title');
             $table->text('description');
             $table->unsignedBigInteger('agency_id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('pub_request_id');
-            $table->foreign('agency_id')->references('id')->on('agencies');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('agency_id')->references('id')->on('agencies')->cascadeOnDelete();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->foreign('pub_request_id')->references('id')->on('pub_requests');
         });
     }

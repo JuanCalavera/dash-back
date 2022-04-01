@@ -6,6 +6,7 @@ use App\Models\Agency;
 use App\Models\AgencySettings\DrawType;
 use App\Models\AgencySettings\Theme;
 use App\Models\User;
+use Database\Factories\PubRequestFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,6 +17,11 @@ class PubRequest extends Model
     protected $fillable = ['deliver_date', 'size', 'description'];
 
     protected $guarded = ['agency_id', 'user_id', 'theme_id', 'draw_type_id'];
+
+    protected static function newFactory()
+    {
+        return PubRequestFactory::new();
+    }
 
     public function user()
     {

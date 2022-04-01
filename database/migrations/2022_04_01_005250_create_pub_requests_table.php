@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('theme_id');
             $table->unsignedBigInteger('draw_type_id');
-            $table->foreign('agency_id')->references('id')->on('agencies');
+            $table->foreign('agency_id')->references('id')->on('agencies')->cascadeOnDelete();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('theme_id')->references('id')->on('themes');
             $table->foreign('draw_type_id')->references('id')->on('draw_types');

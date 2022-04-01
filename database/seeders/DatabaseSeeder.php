@@ -25,48 +25,15 @@ class DatabaseSeeder extends Seeder
         DB::beginTransaction();
 
         try {
-            $agency = Agency::create([
-                'logo_path' => '',
-                'theme_path' => '',
-                'icon_path' => ''
+            $this->call([
+                AgencySeeder::class,
+                PubPiecesForTestUserSeeder::class
             ]);
-
-            $budgetType = new BudgetType(['title' => 'Tipo de orçamento']);
-            $budgetType->agency_id = $agency->id;
-            $budgetType->save();
-
-            $themes = [
-                'Anuncio em jornal', 'Anuncio legal', 'Anuncio revista', 'App', 'Arte gráfica',
-                'Branding', 'Campanha', 'Desenho', 'Marketing Político', 'Mídia em veículos'
-            ];
-
-            foreach ($themes as $themeTitle) {
-                $theme = new Theme(['title' => $themeTitle]);
-                $theme->agency_id = $agency->id;
-                $theme->save();
-            }
-
-            $drawTypes = [
-                'charge', 'Ilustração', 'Mascote', 'Quadrinhos', 'Storyboard(por quadro)'
-            ];
-
-            foreach ($drawTypes as $type) {
-                $drawType = new DrawType(['title' => $type]);
-                $drawType->agency_id = $agency->id;
-                $drawType->save();
-            }
-
-            $user = new User([
-                'cnpj' => '44.536.219/0001-85',
-                'name' => 'test',
-                'password' => Hash::make('12345678')
-            ]);
-            $user->agency_id = $agency->id;
-            $user->save();
 
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
+            throw $th;
         }
     }
 }

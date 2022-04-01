@@ -14,7 +14,7 @@ class Agency extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['logo_path', 'theme_path', 'icon_path'];
+    protected $fillable = ['logo_path', 'theme_path', 'icon_path', 'name'];
 
     public function users()
     {

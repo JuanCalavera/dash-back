@@ -18,8 +18,8 @@ return new class extends Migration
             $table->timestamps();
             $table->unsignedBigInteger('pub_request_id');
             $table->unsignedBigInteger('budget_type_id');
-            $table->foreign('pub_request_id')->references('id')->on('pub_requests');
-            $table->foreign('budget_type_id')->references('id')->on('budget_types');
+            $table->foreign('pub_request_id')->references('id')->on('pub_requests')->cascadeOnDelete();
+            $table->foreign('budget_type_id')->references('id')->on('budget_types')->cascadeOnDelete();
         });
     }
 

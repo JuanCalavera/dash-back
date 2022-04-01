@@ -2,6 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\Agency;
+use App\Models\AgencySettings\DrawType;
+use App\Models\AgencySettings\Theme;
+use App\Models\PubRequest\PubRequest;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,6 +14,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class PubRequestFactory extends Factory
 {
+    protected $model = PubRequest::class;
+
     /**
      * Define the model's default state.
      *
@@ -17,7 +24,13 @@ class PubRequestFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'deliver_date' => $this->faker->dateTimeBetween('now', '+1 years'),
+            'size' => '1920x1080',
+            'description' => $this->faker->text(),
+            'agency_id' => Agency::where('name', 'like', 'Dash')->first()->id,
+            'user_id'  => User::where('name', 'like', 'test')->first()->id,
+            'theme_id' => Theme::all()->random(),
+            'draw_type_id' => DrawType::all()->random()
         ];
     }
 }
