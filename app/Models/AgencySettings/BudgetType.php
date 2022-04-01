@@ -3,6 +3,7 @@
 namespace App\Models\AgencySettings;
 
 use App\Models\Agency;
+use App\Models\PubRequest\PubRequest;
 use Database\Factories\BudgetTypeFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,6 +23,11 @@ class BudgetType extends Model
 
     public function agency()
     {
-        $this->belongsTo(Agency::class);
+        return $this->belongsTo(Agency::class);
+    }
+
+    public function pubRequests()
+    {
+        return $this->belongsToMany(PubRequest::class)->withTimestamps();
     }
 }

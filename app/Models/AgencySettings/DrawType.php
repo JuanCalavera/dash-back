@@ -22,6 +22,6 @@ class DrawType extends Model
 
     public function agency()
     {
-        $this->belongsTo(Agency::class);
+        return $this->belongsTo(Agency::class);
     }
 }

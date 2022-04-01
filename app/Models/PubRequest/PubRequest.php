@@ -3,6 +3,7 @@
 namespace App\Models\PubRequest;
 
 use App\Models\Agency;
+use App\Models\AgencySettings\BudgetType;
 use App\Models\AgencySettings\DrawType;
 use App\Models\AgencySettings\Theme;
 use App\Models\User;
@@ -14,7 +15,7 @@ class PubRequest extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['deliver_date', 'size', 'description'];
+    protected $fillable = ['deliver_date', 'size', 'description', 'exhibition_description'];
 
     protected $guarded = ['agency_id', 'user_id', 'theme_id', 'draw_type_id'];
 
@@ -38,9 +39,13 @@ class PubRequest extends Model
         return $this->belongsTo(Theme::class);
     }
 
-
     public function drawType()
     {
         return $this->belongsTo(DrawType::class);
+    }
+
+    public function budgetTypes()
+    {
+        return $this->belongsToMany(BudgetType::class)->withTimestamps();
     }
 }

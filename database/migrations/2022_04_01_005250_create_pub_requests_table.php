@@ -26,7 +26,8 @@ return new class extends Migration
             $table->foreign('draw_type_id')->references('id')->on('draw_types');
             $table->date('deliver_date');
             $table->string('size');
-            $table->text('description');
+            $table->text('description')->default('');
+            $table->text('exhibition_description');
         });
     }
 
