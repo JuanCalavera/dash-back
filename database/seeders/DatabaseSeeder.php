@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -54,6 +55,14 @@ class DatabaseSeeder extends Seeder
                 $drawType->agency_id = $agency->id;
                 $drawType->save();
             }
+
+            $user = new User([
+                'cnpj' => '44.536.219/0001-85',
+                'name' => 'test',
+                'password' => Hash::make('12345678')
+            ]);
+            $user->agency_id = $agency->id;
+            $user->save();
 
             DB::commit();
         } catch (\Throwable $th) {
