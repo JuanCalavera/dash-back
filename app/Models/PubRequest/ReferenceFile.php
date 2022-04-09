@@ -9,8 +9,6 @@ class ReferenceFile extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['is_image'];
-
     protected $guarded = ['file_path', 'pub_request_id'];
 
     public function pubRequest()

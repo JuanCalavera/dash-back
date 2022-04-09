@@ -14,16 +14,16 @@ class PubPiece extends Model
 
     protected $fillable = ['was_liked', 'title', 'description'];
 
-    protected $guarded = ['agency_id', 'image_url', 'user_id', 'pub_request_id'];
+    protected $guarded = ['agency_id', 'file_url', 'file_type', 'user_id', 'pub_request_id'];
 
     protected static function newFactory()
     {
         return PubPieceFactory::new();
     }
 
-    public function comments()
+    public function comment()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasOne(Comment::class);
     }
 
     public function user()

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->text('content');
-            $table->unsignedBigInteger('pub_request_id');
-            $table->foreign('pub_request_id')->references('id')->on('pub_requests')->cascadeOnDelete();
+            $table->unsignedBigInteger('pub_piece_id');
+            $table->foreign('pub_piece_id')->references('id')->on('pub_requests')->cascadeOnDelete();
         });
     }
 

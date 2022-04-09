@@ -54,6 +54,7 @@ class AgencySeeder extends Seeder
             'name' => 'test',
             'password' => Hash::make('12345678')
         ]);
+
         $user->agency_id = $agency->id;
         $user->save();
     }

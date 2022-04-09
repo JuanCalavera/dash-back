@@ -18,7 +18,6 @@ return new class extends Migration
             $table->timestamps();
             $table->unsignedBigInteger('pub_request_id');
             $table->string('file_path');
-            $table->boolean('is_image');
             $table->foreign('pub_request_id')->references('id')->on('pub_requests')->cascadeOnDelete();
         });
     }

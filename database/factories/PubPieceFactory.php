@@ -28,11 +28,12 @@ class PubPieceFactory extends Factory
             'title' => 'Peça publicitária ' . random_int(0, 100),
             'description' => $this->faker->text(),
             'agency_id'  => Agency::where('name', 'like', 'Dash')->first()->id,
-            'image_url' => Arr::random([
+            'file_url' => Arr::random([
                 'https://i0.wp.com/salifex.com/wp-content/uploads/2019/02/heinz_ketchup_2.jpg?fit=660%2C900&ssl=1',
                 'https://images-na.ssl-images-amazon.com/images/I/61BqmYycZNL.jpg',
                 'https://cdn5.vectorstock.com/i/1000x1000/12/59/coffee-to-go-advertisement-composition-vector-20771259.jpg'
             ]),
+            'file_type' => 'image/jpg',
             'user_id' => User::where('name', 'like', 'test')->first()->id,
             'pub_request_id' => PubRequest::factory()
         ];

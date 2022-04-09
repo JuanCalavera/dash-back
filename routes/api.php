@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Client\AuthController as ClientAuthController;
+use App\Http\Controllers\Client\PubPieceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('login', [ClientAuthController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::resource('pub-pieces', PubPieceController::class)->only('index', 'store');
 });

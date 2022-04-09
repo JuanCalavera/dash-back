@@ -30,7 +30,8 @@ class PubRequestFactory extends Factory
             'agency_id' => Agency::where('name', 'like', 'Dash')->first()->id,
             'user_id'  => User::where('name', 'like', 'test')->first()->id,
             'theme_id' => Theme::all()->random(),
-            'draw_type_id' => DrawType::all()->random()
+            'draw_type_id' => DrawType::all()->random(),
+            'exhibition_description' => $this->faker->text(),
         ];
     }
 }
