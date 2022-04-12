@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 use App\Models\PubPiece\Comment;
 use App\Models\PubPiece\PubPiece;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use App\Models\PubRequest\PubRequest;
+use Illuminate\Support\Facades\Storage;
 use App\Models\PubRequest\ReferenceFile;
 use App\Models\PubRequest\ReferenceLink;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
 
 class PubPieceController extends Controller
 {
@@ -23,7 +24,18 @@ class PubPieceController extends Controller
      */
     public function index()
     {
-        return PubPiece::with('comment')->latest()->get();
+        return PubPiece::with('comment')
+            ->latest()
+            ->get()
+            ->map(function ($pub) {
+                $date = (new Carbon($pub->created_at))->toDateString();
+                // $date = explode(' ', $pub->date)[1];
+                $date = explode('-', $date);
+                $pub->created = $date[2] . '/' . $date[1] . '/' . $date[0];
+                // $pub->created_at = $date;
+
+                return $pub;
+            });
     }
 
     /**
