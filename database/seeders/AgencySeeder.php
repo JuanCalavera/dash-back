@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\Agency;
 use App\Models\AgencySettings\BudgetType;
 use App\Models\AgencySettings\DrawType;
-use App\Models\AgencySettings\Theme;
+use App\Models\AgencySettings\PubType;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -35,7 +35,7 @@ class AgencySeeder extends Seeder
             'Branding', 'Campanha', 'Desenho', 'Marketing Político', 'Mídia em veículos'
         ];
 
-        Theme::factory()
+        PubType::factory()
             ->count(sizeof($themes))
             ->sequence(fn ($sequence) => ['title' => $themes[$sequence->index]])
             ->create();

@@ -46,4 +46,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(PubPiece::class);
     }
+
+    public function agency()
+    {
+        return $this->belongsTo(Agency::class);
+    }
 }

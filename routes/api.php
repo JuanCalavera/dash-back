@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Client\AgencyDataController;
 use App\Http\Controllers\Client\AuthController as ClientAuthController;
 use App\Http\Controllers\Client\PubPieceController;
 use Illuminate\Http\Request;
@@ -20,4 +21,8 @@ Route::post('login', [ClientAuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('pub-pieces', PubPieceController::class)->only('index', 'store');
+
+    Route::prefix('agency')->group(function () {
+        Route::get('pub-request-data', [AgencyDataController::class, 'pubRequestData']);
+    });
 });

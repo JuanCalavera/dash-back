@@ -57,7 +57,7 @@ class PubPieceController extends Controller
                 'description' => $request->description
             ]);
 
-            $pubRequest->theme_id = $request->theme_id;
+            $pubRequest->pub_type_id = $request->pub_type_id;
             $pubRequest->draw_type_id = $request->draw_type_id;
             $pubRequest->agency_id =  $user->agency_id;
             $pubRequest->user_id = $user->id;
@@ -91,7 +91,7 @@ class PubPieceController extends Controller
     private function getRequestCreationRules(): array
     {
         return [
-            'theme_id' => 'required|integer|exists:themes,id',
+            'pub_type_id' => 'required|integer|exists:themes,id',
             'draw_type_id' => 'required|integer|exists:draw_types,id',
             'exhibition_description' => 'required|string',
             'deliver_date' => 'required|date|after:now',
@@ -116,7 +116,7 @@ class PubPieceController extends Controller
                 'description' => $request->description,
             ]);
 
-            $pubPiece->pub_request_id = $request->theme_id;
+            $pubPiece->pub_request_id = $request->pub_request_id;
             $pubPiece->agency_id =  $user->agency_id;
             $pubPiece->user_id = $user->id;
 

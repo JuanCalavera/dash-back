@@ -3,15 +3,15 @@
 namespace Database\Factories;
 
 use App\Models\Agency;
-use App\Models\AgencySettings\Theme;
+use App\Models\AgencySettings\PubType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Theme>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PubType>
  */
-class ThemeFactory extends Factory
+class PubTypeFactory extends Factory
 {
-    protected $model = Theme::class;
+    protected $model = PubType::class;
 
     /**
      * Define the model's default state.
