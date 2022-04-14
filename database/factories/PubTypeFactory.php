@@ -20,8 +20,11 @@ class PubTypeFactory extends Factory
      */
     public function definition()
     {
+        $name  = $this->faker->name();
+
         return [
-            'title' => 'Tipo de desenho ' . random_int(0, 10),
+            'title' => $name,
+            'question' => 'Que tipo de ' .  $name . '?',
             'agency_id'  => Agency::where('name', 'like', 'Dash')->first()->id,
         ];
     }

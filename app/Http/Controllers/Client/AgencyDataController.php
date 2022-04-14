@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Agency;
+use App\Models\AgencySettings\PubType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -19,15 +20,14 @@ class AgencyDataController extends Controller
   {
     $user = $request->user();
     $agency = Agency::with([
-      'pubTypes',
-      'drawTypes',
       'budgetTypes'
     ])->where('id', $user->agency_id)->first();
 
+    $pubTypes = PubType::with('subTypes')->where('agency_id', $agency->id)->get();
+
     return response()->json([
-      'pubTypes' => $agency->pubTypes,
-      'drawTypes' => $agency->drawTypes,
-      'budgetTypes' => $agency->budgetTypes
+      'budgetTypes' => $agency->budgetTypes,
+      'pubTypes' => $pubTypes
     ]);
   }
 

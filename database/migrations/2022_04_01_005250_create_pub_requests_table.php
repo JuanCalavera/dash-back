@@ -19,11 +19,11 @@ return new class extends Migration
             $table->unsignedBigInteger('agency_id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('pub_type_id');
-            $table->unsignedBigInteger('draw_type_id');
+            $table->unsignedBigInteger('pub_sub_type_id');
             $table->foreign('agency_id')->references('id')->on('agencies')->cascadeOnDelete();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('pub_type_id')->references('id')->on('pub_types');
-            $table->foreign('draw_type_id')->references('id')->on('draw_types');
+            $table->foreign('pub_sub_type_id')->references('id')->on('pub_sub_types');
             $table->date('deliver_date');
             $table->string('size');
             $table->text('description')->default('');

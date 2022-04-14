@@ -2,12 +2,11 @@
 
 namespace App\Models\AgencySettings;
 
-use App\Models\Agency;
-use Database\Factories\DrawTypeFactory;
+use Database\Factories\PubSubTypeFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DrawType extends Model
+class PubSubType extends Model
 {
     use HasFactory;
 
@@ -17,11 +16,11 @@ class DrawType extends Model
 
     protected static function newFactory()
     {
-        return DrawTypeFactory::new();
+        return PubSubTypeFactory::new();
     }
 
-    public function agency()
+    public function pubType()
     {
-        return $this->belongsTo(Agency::class);
+        return $this->belongsTo(PubType::class);
     }
 }

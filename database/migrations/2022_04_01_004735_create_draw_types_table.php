@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('draw_types', function (Blueprint $table) {
+        Schema::create('pub_sub_types', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->string('title');
-            $table->unsignedBigInteger('agency_id');
-            $table->foreign('agency_id')->references('id')->on('agencies')->cascadeOnDelete();
+            $table->unsignedBigInteger('pub_type_id');
+            $table->foreign('pub_type_id')->references('id')->on('pub_types')->cascadeOnDelete();
         });
     }
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('draw_types');
+        Schema::dropIfExists('pub_sub_types');
     }
 };

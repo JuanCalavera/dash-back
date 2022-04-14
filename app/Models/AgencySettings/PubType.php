@@ -11,7 +11,7 @@ class PubType extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title'];
+    protected $fillable = ['title', 'question'];
 
     protected $guarded = ['agency_id'];
 
@@ -23,5 +23,10 @@ class PubType extends Model
     public function agency()
     {
         return $this->belongsTo(Agency::class);
+    }
+
+    public function subTypes()
+    {
+        return $this->hasMany(PubSubType::class);
     }
 }

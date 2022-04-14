@@ -4,7 +4,7 @@ namespace App\Models\PubRequest;
 
 use App\Models\Agency;
 use App\Models\AgencySettings\BudgetType;
-use App\Models\AgencySettings\DrawType;
+use App\Models\AgencySettings\PubSubType;
 use App\Models\AgencySettings\PubType;
 use App\Models\User;
 use Database\Factories\PubRequestFactory;
@@ -17,7 +17,7 @@ class PubRequest extends Model
 
     protected $fillable = ['deliver_date', 'size', 'description', 'exhibition_description'];
 
-    protected $guarded = ['agency_id', 'user_id', 'pub_type_id', 'draw_type_id'];
+    protected $guarded = ['agency_id', 'user_id', 'pub_type_id', 'pub_sub_type_id'];
 
     protected static function newFactory()
     {
@@ -39,9 +39,9 @@ class PubRequest extends Model
         return $this->belongsTo(PubType::class);
     }
 
-    public function drawType()
+    public function pubSubType()
     {
-        return $this->belongsTo(DrawType::class);
+        return $this->belongsTo(PubSubType::class);
     }
 
     public function budgetTypes()

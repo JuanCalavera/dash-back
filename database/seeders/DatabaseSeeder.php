@@ -2,15 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Agency;
-use App\Models\AgencySettings\BudgetType;
-use App\Models\AgencySettings\DrawType;
-use App\Models\AgencySettings\Theme;
-use App\Models\User;
+
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {

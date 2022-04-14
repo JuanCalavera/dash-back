@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Agency;
 use App\Models\AgencySettings\BudgetType;
-use App\Models\AgencySettings\DrawType;
+use App\Models\AgencySettings\PubSubType;
 use App\Models\AgencySettings\PubType;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -30,24 +30,28 @@ class AgencySeeder extends Seeder
 
         BudgetType::factory()->create();
 
-        $themes = [
+        $pubTypes = [
             'Anuncio em jornal', 'Anuncio legal', 'Anuncio revista', 'App', 'Arte gráfica',
             'Branding', 'Campanha', 'Desenho', 'Marketing Político', 'Mídia em veículos'
         ];
 
         PubType::factory()
-            ->count(sizeof($themes))
-            ->sequence(fn ($sequence) => ['title' => $themes[$sequence->index]])
+            ->count(sizeof($pubTypes))
+            ->has(PubSubType::factory()->count(5), 'subTypes')
+            ->sequence(fn ($sequence) => [
+                'title' => $pubTypes[$sequence->index],
+                'question' => 'Que tipo de ' .  $pubTypes[$sequence->index] . '?'
+            ])
             ->create();
 
-        $drawTypes = [
-            'Charge', 'Ilustração', 'Mascote', 'Quadrinhos', 'Storyboard(por quadro)'
-        ];
+        // $drawTypes = [
+        //     'Charge', 'Ilustração', 'Mascote', 'Quadrinhos', 'Storyboard(por quadro)'
+        // ];
 
-        DrawType::factory()
-            ->count(sizeof($drawTypes))
-            ->sequence(fn ($sequence) => ['title' => $drawTypes[$sequence->index]])
-            ->create();
+        // PubSubType::factory()
+        //     ->count(sizeof($drawTypes))
+        //     ->sequence(fn ($sequence) => ['title' => $drawTypes[$sequence->index]])
+        //     ->create();
 
         $user = new User([
             'cnpj' => '44.536.219/0001-85',

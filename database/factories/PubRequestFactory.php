@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Agency;
-use App\Models\AgencySettings\DrawType;
+use App\Models\AgencySettings\PubSubType;
 use App\Models\AgencySettings\PubType;
 use App\Models\PubRequest\PubRequest;
 use App\Models\User;
@@ -30,7 +30,7 @@ class PubRequestFactory extends Factory
             'agency_id' => Agency::where('name', 'like', 'Dash')->first()->id,
             'user_id'  => User::where('name', 'like', 'test')->first()->id,
             'pub_type_id' => PubType::all()->random(),
-            'draw_type_id' => DrawType::all()->random(),
+            'pub_sub_type_id' => PubSubType::all()->random(),
             'exhibition_description' => $this->faker->text(),
         ];
     }
