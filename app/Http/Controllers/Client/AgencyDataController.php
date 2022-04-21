@@ -26,8 +26,8 @@ class AgencyDataController extends Controller
     $pubTypes = PubType::with('subTypes')->where('agency_id', $agency->id)->get();
 
     return response()->json([
+      'pubTypes' => $pubTypes,
       'budgetTypes' => $agency->budgetTypes,
-      'pubTypes' => $pubTypes
     ]);
   }
 

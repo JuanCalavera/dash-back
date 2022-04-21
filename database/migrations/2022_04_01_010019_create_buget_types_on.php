@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('buget_types_on', function (Blueprint $table) {
+        Schema::create('budget_types_on', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->unsignedBigInteger('pub_request_id');
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('buget_types_on');
+        Schema::dropIfExists('budget_types_on');
     }
 };

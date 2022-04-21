@@ -14,6 +14,7 @@ use App\Models\PubRequest\PubRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Models\PubRequest\ReferenceFile;
 use App\Models\PubRequest\ReferenceLink;
+use Exception;
 
 class PubPieceController extends Controller
 {
@@ -58,23 +59,28 @@ class PubPieceController extends Controller
             ]);
 
             $pubRequest->pub_type_id = $request->pub_type_id;
-            $pubRequest->draw_type_id = $request->draw_type_id;
+            $pubRequest->pub_sub_type_id = $request->pub_sub_type_id;
             $pubRequest->agency_id =  $user->agency_id;
             $pubRequest->user_id = $user->id;
 
             $pubRequest->save();
 
-            foreach ($request->budget_types_ids as $bId) $pubRequest->budgetTypes()->attach($bId);
-            foreach ($request->reference_links as $link) {
+            $budgetTypesIds = json_decode($request->budget_types_ids);
+
+            foreach ($budgetTypesIds as $bId) $pubRequest->budgetTypes()->attach($bId);
+
+            $links = json_decode($request->reference_links);
+
+            foreach ($links as $link) {
                 $linkEl = new ReferenceLink(['link' => $link]);
                 $linkEl->pub_request_id = $pubRequest->id;
                 $linkEl->save();
             };
 
             if ($request->hasFile('reference_files')) {
-                foreach ($request->allFiles() as $file) {
+                foreach ($request->file('reference_files') as $file) {
                     $path = Storage::put('/public/referenceFiles', $file);
-                    $referenceFile = new ReferenceFile(['is_image' => true]);
+                    $referenceFile = new ReferenceFile();
                     $referenceFile->file_path = str_replace('public', 'storage', $path);
                     $referenceFile->pub_request_id = $pubRequest->id;
                     $referenceFile->save();
@@ -91,8 +97,8 @@ class PubPieceController extends Controller
     private function getRequestCreationRules(): array
     {
         return [
-            'pub_type_id' => 'required|integer|exists:themes,id',
-            'draw_type_id' => 'required|integer|exists:draw_types,id',
+            'pub_type_id' => 'required|integer|exists:pub_types,id',
+            'pub_sub_type_id' => 'required|integer|exists:pub_sub_types,id',
             'exhibition_description' => 'required|string',
             'deliver_date' => 'required|date|after:now',
             'size' => 'required|string|max:255',

@@ -28,6 +28,6 @@ class BudgetType extends Model
 
     public function pubRequests()
     {
-        return $this->belongsToMany(PubRequest::class)->withTimestamps();
+        return $this->belongsToMany(PubRequest::class, 'budget_types_on')->withTimestamps();
     }
 }
