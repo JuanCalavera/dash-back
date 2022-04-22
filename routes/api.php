@@ -22,6 +22,8 @@ Route::post('login', [ClientAuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('pub-pieces', PubPieceController::class)->only('index', 'store');
     Route::post('pub-pieces/make-request', [PubPieceController::class, 'makeRequest']);
+    Route::post('pub-pieces/{pub}/like', [PubPieceController::class, 'like']);
+    Route::post('pub-pieces/{pub}/dislike', [PubPieceController::class, 'dislike']);
 
     Route::prefix('agency')->group(function () {
         Route::get('pub-request-data', [AgencyDataController::class, 'pubRequestData']);
