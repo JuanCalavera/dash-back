@@ -10,11 +10,14 @@ use App\Models\PubPiece\PubPiece;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Agency;
 use App\Models\PubRequest\PubRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Models\PubRequest\ReferenceFile;
 use App\Models\PubRequest\ReferenceLink;
+use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 
 class PubPieceController extends Controller
 {
@@ -30,13 +33,21 @@ class PubPieceController extends Controller
             ->get()
             ->map(function ($pub) {
                 $date = (new Carbon($pub->created_at))->toDateString();
-                // $date = explode(' ', $pub->date)[1];
                 $date = explode('-', $date);
                 $pub->created = $date[2] . '/' . $date[1] . '/' . $date[0];
-                // $pub->created_at = $date;
 
                 return $pub;
             });
+    }
+
+    public function indexRequest(Agency $agencyId): JsonResponse
+    {
+        if(!$agencyId){
+            return response()->json(null);
+        }
+
+        $pubRequests = $agencyId->pubRequests()->orderBy('id', 'DESC')->get();
+        return response()->json($pubRequests);
     }
 
     /**
@@ -44,70 +55,24 @@ class PubPieceController extends Controller
      */
     public function makeRequest(Request $request): JsonResponse
     {
-        $this->validate($request, $this->getRequestCreationRules());
 
-        DB::beginTransaction();
+        $user = User::find(Auth::user()->id);
+        $agency = $user->agency()->first();
+        
+        // dd('hello');
+        $pubRequest = new PubRequest([
+            'agency_id' => $agency->id,
+            'user_id' => $user->id,
+            'pub_type_id' => $request->pub_type_id,
+            'pub_sub_type_id' => $request->pub_sub_type_id,
+            'deliver_date' => $request->deliver_date,
+            'size' => $request->size,
+            'description' => $request->description,
+            'exhibition_description' => $request->exhibition_description
+        ]);
 
-        $user = $request->user();
 
-        try {
-            $pubRequest = new PubRequest([
-                'exhibition_description' => $request->exhibition_description,
-                'deliver_date' => $request->deliver_date,
-                'size' => $request->size,
-                'description' => $request->description
-            ]);
-
-            $pubRequest->pub_type_id = $request->pub_type_id;
-            $pubRequest->pub_sub_type_id = $request->pub_sub_type_id;
-            $pubRequest->agency_id =  $user->agency_id;
-            $pubRequest->user_id = $user->id;
-
-            $pubRequest->save();
-
-            $budgetTypesIds = json_decode($request->budget_types_ids);
-
-            foreach ($budgetTypesIds as $bId) $pubRequest->budgetTypes()->attach($bId);
-
-            $links = json_decode($request->reference_links);
-
-            foreach ($links as $link) {
-                $linkEl = new ReferenceLink(['link' => $link]);
-                $linkEl->pub_request_id = $pubRequest->id;
-                $linkEl->save();
-            };
-
-            if ($request->hasFile('reference_files')) {
-                foreach ($request->file('reference_files') as $file) {
-                    $path = Storage::put('/public/referenceFiles', $file);
-                    $referenceFile = new ReferenceFile();
-                    $referenceFile->file_path = str_replace('public', 'storage', $path);
-                    $referenceFile->pub_request_id = $pubRequest->id;
-                    $referenceFile->save();
-                }
-            }
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            throw $th;
-        }
-
-        return response()->json(['request' => $pubRequest], 201);
-    }
-
-    private function getRequestCreationRules(): array
-    {
-        return [
-            'pub_type_id' => 'required|integer|exists:pub_types,id',
-            'pub_sub_type_id' => 'required|integer|exists:pub_sub_types,id',
-            'exhibition_description' => 'required|string',
-            'deliver_date' => 'required|date|after:now',
-            'size' => 'required|string|max:255',
-            'budget_types_ids' => 'required',
-            'budget_types_ids.*' => 'integer|exists:budget_types,id',
-            'description' => 'string',
-            'reference_files.*' => 'image',
-            'reference_links.*' => 'string'
-        ];
+        return response()->json(['request' => $pubRequest]);
     }
 
     public function store(Request $request): JsonResponse
@@ -216,6 +181,11 @@ class PubPieceController extends Controller
     public function show(PubPiece $pubPiece)
     {
         //
+    }
+
+    public function showAgency(Agency $agencyId): JsonResponse
+    {
+        return response()->json(['agency' => $agencyId, 'user' => Auth::user()->cnpj]);
     }
 
     /**

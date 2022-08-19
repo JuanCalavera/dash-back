@@ -26,7 +26,7 @@ return new class extends Migration
             $table->foreign('pub_sub_type_id')->references('id')->on('pub_sub_types');
             $table->date('deliver_date');
             $table->string('size');
-            $table->text('description')->default('');
+            $table->text('description');
             $table->text('exhibition_description');
         });
     }
