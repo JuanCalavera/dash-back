@@ -21,11 +21,9 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'cnpj',
+        'email',
         'password',
     ];
-
-    protected $guarded = ['agency_id'];
 
     /**
      * The attributes that should be hidden for serialization.

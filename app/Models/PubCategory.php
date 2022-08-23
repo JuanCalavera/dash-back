@@ -5,13 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Agency extends Model
+class PubCategory extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'cnpj',
-        'email',
+        'title',
+        'pubpiece_id'
     ];
+
+    public function pubPiece()
+    {
+        return $this->hasOne(PubPiece::class, 'id', 'pubpiece_id');
+    }
 }
