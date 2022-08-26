@@ -5,82 +5,78 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePubPieceRequest;
 use App\Http\Requests\UpdatePubPieceRequest;
 use App\Models\PubPiece;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PubPieceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function index(): JsonResponse
     {
-        //
+        $pubs = PubPiece::all();
+        return response()->json(['pubs' => $pubs]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function store(Request $request): JsonResponse
     {
-        //
+        $pub = PubPiece::create([
+            'status' => 'pending',
+            'title' => $request->title,
+            'description' => $request->description,
+            'deliver_date' => $request->deliver_date,
+            'user_id' => Auth::user()->id
+        ]);
+
+
+        if ($pub) {
+            return response()->json($pub);
+        }
+
+        return response()->json(['error' => "Deu erro ao criar publicidade"]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StorePubPieceRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StorePubPieceRequest $request)
+    public function show(PubPiece $pubPiece): JsonResponse
     {
-        //
+        return response()->json($pubPiece);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\PubPiece  $pubPiece
-     * @return \Illuminate\Http\Response
-     */
-    public function show(PubPiece $pubPiece)
+    public function update(Request $request, PubPiece $pubPiece): JsonResponse
     {
-        //
+        if ($pubPiece->update([
+            'title' => $request->title ? $request->title : $pubPiece->title,
+            'description' => $request->description ? $request->description : $pubPiece->description,
+            'deliver_date' => $request->deliver_date ? $request->deliver_date : $pubPiece->deliver_date,
+        ])) {
+            return response()->json($pubPiece);
+        }
+
+        return response()->json(['error' => 'Não foi possível atualizar usuário']);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\PubPiece  $pubPiece
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(PubPiece $pubPiece)
+    public function updateStatus(Request $request, PubPiece $pubPiece): JsonResponse
     {
-        //
+        if ($pubPiece->id) {
+            if ($pubPiece->update([
+                'status' => $request->status ? $request->status : $pubPiece->status,
+            ])) {
+                return response()->json(["status" => $pubPiece->status]);
+            }
+            return response()->json(['error' => "Publicidade não atualizada"], 500);
+        }
+
+        return response()->json(['error' => "Publicidade não localizada"], 500);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdatePubPieceRequest  $request
-     * @param  \App\Models\PubPiece  $pubPiece
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdatePubPieceRequest $request, PubPiece $pubPiece)
+    public function destroy(PubPiece $pubPiece): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\PubPiece  $pubPiece
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(PubPiece $pubPiece)
-    {
-        //
+        if ($pubPiece->id) {
+            $title = $pubPiece->title;
+            if ($pubPiece->delete()) {
+                return response()->json(['success' => "Deletada a publicidade {$title}"]);
+            }
+            return response()->json(['error' => "Não foi possível deletar a publicidade {$title}"]);
+        }
+        return response()->json(['error' => 'A publicidade não foi encontrada']);
     }
 }

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->bigInteger('cnpj');
             $table->string('email');
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
