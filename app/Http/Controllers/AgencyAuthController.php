@@ -50,6 +50,10 @@ class AgencyAuthController extends Controller
 
         if ($agency) {
             $token = $agency->createToken('Agência');
+            $agency = Auth::attempt([
+                'cnpj' => $request->cnpj,
+                'password' => $request->password
+            ]);
 
             return response()->json([
                 'status' => 'success',
@@ -93,5 +97,20 @@ class AgencyAuthController extends Controller
             return response()->json(["error" => "Não foi possível excluir o usuário {$name}"], 401);
         }
         return response()->json(["error" => "Não foi possível identificar usuário"], 401);
+    }
+
+    public function createLinkForClient(Request $request): JsonResponse
+    {
+        if(!$request->email){
+            return response()->json('Não há um email inserido');   
+        }
+        if(!Auth::check()){
+            return response()->json('Não foi possível criar uma url');   
+        }
+
+        $userId = Auth::user()->id;
+            $tempUrl = 'https://laravel.com/docs/9.x/sanctum#main-content/' . $userId;
+
+            return response()->json($tempUrl);
     }
 }

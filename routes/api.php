@@ -4,6 +4,8 @@ use App\Http\Controllers\AgencyAuthController;
 use App\Http\Controllers\Client\PubPieceController;
 use App\Http\Controllers\ClientAuthController;
 use App\Http\Controllers\CommentController;
+use App\Mail\ClientCreation;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,6 +24,15 @@ Route::prefix('/agency')->group(function () {
     Route::post('/register', [AgencyAuthController::class, 'register']);
     Route::post('/update/{agency}', [AgencyAuthController::class, 'update']);
     Route::get('/delete/{agency}', [AgencyAuthController::class, 'destroy']);
+});
+
+Route::prefix('/agency')->middleware('auth:sanctum')->group(function () {
+    Route::post('/create-link', [AgencyAuthController::class, 'createLinkForClient']);
+});
+
+Route::get('/create-link', function(){
+    return new ClientCreation("juanconecti@gmail.com", 'Juan');
+    // Mail::send(new ClientCreation('juanconecti@gmail.com'));
 });
 
 Route::prefix('/client')->group(function () {
