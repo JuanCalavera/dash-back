@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ClientCreation;
+use App\Mail\ForgotPassword;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class AgencyAuthController extends Controller
@@ -101,16 +104,63 @@ class AgencyAuthController extends Controller
 
     public function createLinkForClient(Request $request): JsonResponse
     {
-        if(!$request->email){
-            return response()->json('Não há um email inserido');   
+        if(!$request->email || !$request->name){
+            return response()->json('Não há um campo inserido');   
         }
         if(!Auth::check()){
-            return response()->json('Não foi possível criar uma url');   
+            return response()->json('Não foi possível criar uma url');
         }
 
         $userId = Auth::user()->id;
-            $tempUrl = 'https://laravel.com/docs/9.x/sanctum#main-content/' . $userId;
+            $tempUrl = "https://laravel.com/docs/9.x/sanctum#main-content/?podman={$userId}";
+            Mail::send(new ClientCreation($request->email, $request->name, Auth::user()->name));
+            
 
-            return response()->json($tempUrl);
+            return response()->json("Criada a URL: {$tempUrl}");
+    }
+
+    public function forgotPassword(Request $request): JsonResponse
+    {
+        if(!$request->email){
+            return response()->json('Email faltante');
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        if(!$user->id){
+            return response()->json('Nenhum usuário com esse email');
+        }
+
+        $code = mt_rand(10000000, 99999999);
+
+        $user->code = $code;
+        $user->save();
+
+        Mail::send(new ForgotPassword($user, $code));
+
+        return response()->json('Código de recuperação enviado para o seu email');
+    }
+
+    public function refactPassword(Request $request): JsonResponse
+    {
+        if(!$request->password || !$request->repass || !$request->code){
+            return response()->json('Há campos faltantes', 401);
+        }
+
+        if($request->password != $request->repass){
+            return response()->json('As senhas não correspondem', 401);
+        }
+
+        $user = User::where('code', $request->code)->first();
+
+        if(!$user->id){
+            return response()->json('Código incorreto', 401);
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->code = null;
+        $user->save();
+
+        return response()->json('Código atualizado :)');
     }
 }

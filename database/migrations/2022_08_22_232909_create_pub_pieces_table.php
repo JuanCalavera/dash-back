@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('description');
             $table->string('deliver_date');
             $table->string('size');
-            $table->string('files_path');
+            $table->json('files_path')->nullable();
             $table->bigInteger('user_id');
             $table->timestamps();
         });

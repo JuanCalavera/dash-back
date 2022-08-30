@@ -13,16 +13,18 @@ class ClientCreation extends Mailable
 
     private $email;
     private $name;
+    private $agency;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(String $email, String $name)
+    public function __construct(String $email, String $name, String $agency)
     {
         $this->email = $email;
         $this->name = $name;
+        $this->agency = $agency;
     }
 
     /**
@@ -32,12 +34,13 @@ class ClientCreation extends Mailable
      */
     public function build()
     {
-        $this->subject('criação cliente teste');
+        $this->subject("Venha ser cliente da {$this->agency}");
         $this->to($this->email, $this->name);
 
         return $this->markdown('newclient', [
             'email' => $this->email,
-            'name' => $this->name
+            'name' => $this->name,
+            'agency' => $this->agency
         ]);
     }
 }

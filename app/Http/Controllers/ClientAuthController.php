@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewClient;
+use App\Models\AgencyWithClient;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class ClientAuthController extends Controller
 {
@@ -36,24 +39,40 @@ class ClientAuthController extends Controller
         ], 401);
     }
 
-    public function register(Request $request): JsonResponse
+    public function register(Request $request, int $agency): JsonResponse
     {
 
-        $agency = User::create([
+        $agencyUser = User::where('cnpj', $agency)->first();
+
+        if(!$agencyUser->id){
+            return response()->json('Agência não encontrada');
+        }
+        if($agencyUser->type != 'agency'){
+            return response()->json('Não é possível de fazer essa ação');
+        }
+
+        $client = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'cnpj' => $request->cnpj,
             'password' => Hash::make($request->password),
             'type' => 'client'
         ]);
 
-        if ($agency) {
-            $token = $agency->createToken('Client');
+        if ($client) {
+
+            AgencyWithClient::create([
+                'client' => $client->id,
+                'agency' => $agencyUser->id
+            ]);
+
+            Mail::send(new NewClient($client, $agencyUser));
+
+            $token = $client->createToken('Client');
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Agência criada com sucesso',
-                'agency' => $agency,
+                'client' => $client,
                 'authorization' => [
                     $token->accessToken->name,
                     $token->plainTextToken
@@ -68,7 +87,6 @@ class ClientAuthController extends Controller
     {
         $update = $agency->update([
             'name' => $request->name ? $request->name : $agency->name,
-            'email' => $request->email ? $request->email : $agency->email,
         ]);
 
         if ($update) {

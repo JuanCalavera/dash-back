@@ -17,9 +17,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('cnpj')->unique();
+            $table->string('phone')->nullable();
+            $table->string('cnpj')->nullable()->unique();
             $table->string('password');
             $table->string('type');
+            $table->string('code')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
