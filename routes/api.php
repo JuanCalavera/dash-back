@@ -24,6 +24,10 @@ Route::prefix('/agency')->group(function () {
     Route::post('/put-password', [AgencyAuthController::class, 'refactPassword']);
 });
 
+Route::prefix('/user')->middleware('auth:sanctum')->group(function () {
+    Route::get('/', [AgencyAuthController::class, 'getUser']);
+});
+
 Route::prefix('/agency')->middleware('auth:sanctum')->group(function () {
     Route::post('/create-link', [AgencyAuthController::class, 'createLinkForClient']);
     Route::post('/update/{agency}', [AgencyAuthController::class, 'update']);
@@ -49,8 +53,8 @@ Route::prefix('/pub-piece')->middleware('auth:sanctum')->group(function () {
     Route::get('/{pubPiece}', [PubPieceController::class, 'show']);
     Route::post('/update/{pubPiece}', [PubPieceController::class, 'update']);
     Route::get('/delete/{pubPiece}', [PubPieceController::class, 'destroy']);
-    Route::get('{pubPiece}/comment', [CommentController::class, 'index']);
-    Route::post('{pubPiece}/comment', [CommentController::class, 'store']);
-    Route::post('/{pubPiece}/comment/{comment}', [CommentController::class, 'update']);
-    Route::get('/{pubPiece}/{comment}', [CommentController::class, 'destroy']);
+    Route::get('/{pubPiece}/comment', [CommentController::class, 'index']);
+    Route::post('/{pubPiece}/comment', [CommentController::class, 'store']);
+    Route::post('/comment/{comment}', [CommentController::class, 'update']);
+    Route::get('/comment/{comment}', [CommentController::class, 'destroy']);
 });

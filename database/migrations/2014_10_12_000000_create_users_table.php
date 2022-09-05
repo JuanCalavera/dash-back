@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('cnpj')->nullable()->unique();
             $table->string('password');
             $table->string('type');
+            $table->string('icon')->nullable();
             $table->string('code')->nullable();
             $table->rememberToken();
             $table->timestamps();

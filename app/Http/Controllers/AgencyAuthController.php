@@ -28,7 +28,7 @@ class AgencyAuthController extends Controller
                 'status' => 'success',
                 'agency' => $agency,
                 'authorization' => [
-                    $token->accessToken->name,
+                    $user->type,
                     $token->plainTextToken
                 ]
             ]);
@@ -162,5 +162,14 @@ class AgencyAuthController extends Controller
         $user->save();
 
         return response()->json('Código atualizado :)');
+    }
+
+    public function getUser(): JsonResponse
+    {
+        if(!Auth::check()){
+            return response()->json('Autenticação inválida', 401);
+        }
+
+        return response()->json(Auth::user());
     }
 }

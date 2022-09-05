@@ -13,6 +13,7 @@
         <p>Descrição: {{ $description }}</p>
         <p>Data Prazo: {{ $deliverDate }}</p>
         <p>Tamanho: {{ $size }}</p>
-        @component('button', ['url' => 'https://www.notion.so/Dash-ce76457fc4d0431093c453f045c3b70d'])
+        @component('mail::button', ['url' => 'https://www.notion.so/Dash-ce76457fc4d0431093c453f045c3b70d'])
+        Ver Requisição
     @endcomponent
 @endif

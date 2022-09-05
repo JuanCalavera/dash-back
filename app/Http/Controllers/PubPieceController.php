@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePubPieceRequest;
-use App\Http\Requests\UpdatePubPieceRequest;
 use App\Mail\CreatePubRequest;
 use App\Models\AgencyWithClient;
 use App\Models\PubPiece;
@@ -93,15 +91,25 @@ class PubPieceController extends Controller
 
     public function putFiles(PubPiece $pubPiece, Request $request): JsonResponse
     {
+        if(Auth::user()->type != 'agency'){
+            return response()->json('Você não possui acesso a esta ação');
+        }
+
         if(!$request->files || !$request){
             return response()->json('Há campos vazios');
         }
 
         $files = $request->file('files');
 
+        $paths = [];
+
         foreach($files as $file){
-            $file->store('pubpiece', 'public');
+            $storagePath = $file->store('pubpiece', 'public');
+            $paths[] = url('storage') . '/' . $storagePath;
         }
+
+        $pubPiece->files_path = json_encode($paths);
+        $pubPiece->save();
 
         Mail::send(new CreatePubRequest(Auth::user(), $pubPiece, 'agency'));
 

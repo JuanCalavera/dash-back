@@ -15,8 +15,14 @@ class ClientAuthController extends Controller
 {
     public function login(Request $request): JsonResponse
     {
+
+        $request->validate([
+            'email' => 'required',
+            'password' => 'required'
+        ]);
+
         $agency = Auth::attempt([
-            'cnpj' => $request->cnpj,
+            'email' => $request->email,
             'password' => $request->password
         ]);
 
@@ -27,7 +33,7 @@ class ClientAuthController extends Controller
                 'status' => 'success',
                 'agency' => $agency,
                 'authorization' => [
-                    $token->accessToken->name,
+                    $user->type,
                     $token->plainTextToken
                 ]
             ]);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
 use App\Models\Comment;
+use App\Models\PubPiece;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -14,9 +15,9 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(PubPiece $pubPiece)
     {
-        $comments = Comment::all();
+        $comments = Comment::where('pubpiece_id', $pubPiece->id)->get();
 
         if ($comments) {
             return response()->json($comments);
@@ -31,11 +32,11 @@ class CommentController extends Controller
      * @param  \App\Http\Requests\StoreCommentRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PubPiece $pubPiece, Request $request)
     {
         $comment = Comment::create([
             'content' => $request->content,
-            'pubpiece_id' => $request->pubpiece_id
+            'pubpiece_id' => $pubPiece->id
         ]);
 
         if ($comment) {
@@ -51,14 +52,14 @@ class CommentController extends Controller
      * @param  \App\Models\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function show(Comment $comment)
+    /* public function show(Comment $comment)
     {
         if ($comment) {
             return response()->json($comment);
         }
 
         return response()->json(['error' => 'Comentário não localizado']);
-    }
+    } */
 
     /**
      * Update the specified resource in storage.
@@ -77,7 +78,7 @@ class CommentController extends Controller
             return response()->json($comment);
         }
 
-        return response()->json(['error' => 'Comentário não localizado']);
+        return response()->json(['error' => 'Comentário não localizado'], 404);
     }
 
     /**
@@ -92,8 +93,8 @@ class CommentController extends Controller
             if ($comment->delete()) {
                 return response()->json(["success" => 'Comentário removido']);
             }
-            return response()->json(["success" => 'Erro ao deletar o comentário']);
+            return response()->json(["error" => 'Erro ao deletar o comentário'], 417);
         }
-        return response()->json(["success" => 'Comentário não localizado']);
+        return response()->json(["error" => 'Comentário não localizado'], 404);
     }
 }
