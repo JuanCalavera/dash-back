@@ -12,7 +12,8 @@ class Comment extends Model
 
     protected $fillable = [
         'content',
-        'pubpiece_id'
+        'pubpiece_id',
+        'user_id'
     ];
 
     public function pubPiece()

@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateCommentRequest;
 use App\Models\Comment;
 use App\Models\PubPiece;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -36,7 +37,8 @@ class CommentController extends Controller
     {
         $comment = Comment::create([
             'content' => $request->content,
-            'pubpiece_id' => $pubPiece->id
+            'pubpiece_id' => $pubPiece->id,
+            'user_id' => Auth::user()->id
         ]);
 
         if ($comment) {
@@ -45,21 +47,6 @@ class CommentController extends Controller
 
         return response()->json(['error' => "Erro ao gerar comentário"]);
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Comment  $comment
-     * @return \Illuminate\Http\Response
-     */
-    /* public function show(Comment $comment)
-    {
-        if ($comment) {
-            return response()->json($comment);
-        }
-
-        return response()->json(['error' => 'Comentário não localizado']);
-    } */
 
     /**
      * Update the specified resource in storage.

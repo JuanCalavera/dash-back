@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->text('content');
             $table->bigInteger('pubpiece_id');
+            $table->bigInteger('user_id');
             $table->timestamps();
         });
     }
