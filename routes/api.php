@@ -34,6 +34,10 @@ Route::prefix('/agency')->middleware('auth:sanctum')->group(function () {
     Route::get('/delete/{agency}', [AgencyAuthController::class, 'destroy']);
 });
 
+Route::get('/', function (){
+    response()->json(['success' => 'está no ar']);
+});
+
 Route::prefix('/client')->group(function () {
     Route::post('/login', [ClientAuthController::class, 'login']);
     Route::post('/{agency}/register-client', [ClientAuthController::class, 'register']);
