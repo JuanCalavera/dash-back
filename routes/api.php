@@ -35,7 +35,7 @@ Route::prefix('/agency')->middleware('auth:sanctum')->group(function () {
 });
 
 Route::get('/', function (){
-    response()->json(['success' => 'está no ar']);
+    return response()->json(['success' => 'está no ar']);
 });
 
 Route::prefix('/client')->group(function () {
